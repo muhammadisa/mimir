@@ -65,12 +65,12 @@ func pretty(data interface{}) {
 	}
 }
 
-func GenJSONWebToken(id int64) (*JWTToken, error) {
+func GenJSONWebToken(id int64, accessExpr time.Duration) (*JWTToken, error) {
 	// AccessToken
 	claims := jwt.MapClaims{}
 	claims["authorized"] = true
 	claims["user_id"] = id
-	claims["exp"] = time.Now().Add(time.Minute * 2).Unix()
+	claims["exp"] = time.Now().Add(accessExpr).Unix()
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	token, err := jwtToken.SignedString([]byte(os.Getenv("API_SECRET")))
 	if err != nil {
@@ -80,7 +80,6 @@ func GenJSONWebToken(id int64) (*JWTToken, error) {
 	refreshToken := jwt.New(jwt.SigningMethodHS256)
 	rtClaims := refreshToken.Claims.(jwt.MapClaims)
 	rtClaims["user_id"] = id
-	rtClaims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 	refresh, err := refreshToken.SignedString([]byte(os.Getenv("API_SECRET")))
 	if err != nil {
 		return nil, err
