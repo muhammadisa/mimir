@@ -4,8 +4,42 @@ import (
 	"context"
 	firebase "firebase.google.com/go/v4"
 	"firebase.google.com/go/v4/auth"
+	"github.com/dgrijalva/jwt-go"
 	"google.golang.org/api/option"
+	"os"
+	"time"
 )
+
+type JWTToken struct {
+	Token   string `json:"token"`
+	Refresh string `json:"refresh"`
+}
+
+func GenJSONWebToken(id int64) (*JWTToken, error) {
+	// AccessToken
+	claims := jwt.MapClaims{}
+	claims["authorized"] = true
+	claims["user_id"] = id
+	claims["exp"] = time.Now().Add(time.Minute * 15).Unix()
+	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	token, err := jwtToken.SignedString([]byte(os.Getenv("API_SECRET")))
+	if err != nil {
+		return nil, err
+	}
+	// RefreshToken
+	refreshToken := jwt.New(jwt.SigningMethodHS256)
+	rtClaims := refreshToken.Claims.(jwt.MapClaims)
+	rtClaims["user_id"] = id
+	rtClaims["exp"] = time.Now().Add(time.Hour * 24).Unix()
+	refresh, err := refreshToken.SignedString([]byte(os.Getenv("API_SECRET")))
+	if err != nil {
+		return nil, err
+	}
+	return &JWTToken{
+		Token:   token,
+		Refresh: refresh,
+	}, nil
+}
 
 func InitFirebaseApp(ctx context.Context, servicePath string) (*firebase.App, error) {
 	app, err := firebase.NewApp(ctx, nil, option.WithCredentialsFile(servicePath))
