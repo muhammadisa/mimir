@@ -2,8 +2,11 @@ package mimir
 
 import (
 	"context"
+	"encoding/json"
+	"errors"
 	firebase "firebase.google.com/go/v4"
 	"firebase.google.com/go/v4/auth"
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"google.golang.org/api/option"
 	"os"
@@ -15,12 +18,59 @@ type JWTToken struct {
 	Refresh string `json:"refresh"`
 }
 
+func JSONWebTokenValidate(ctx context.Context) error {
+	bearer, err := Bearer(ctx)
+	if err != nil {
+		return err
+	}
+	token, err := jwt.Parse(bearer, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(os.Getenv("API_SECRET")), nil
+	})
+	if err != nil {
+		return err
+	}
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		pretty(claims)
+	}
+	return nil
+}
+
+func ExtractIDJSONWebToken(ctx context.Context) (interface{}, error) {
+	bearer, err := Bearer(ctx)
+	if err != nil {
+		return nil, err
+	}
+	token, err := jwt.Parse(bearer, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(os.Getenv("API_SECRET")), nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		return claims["user_id"], nil
+	}
+	return nil, errors.New("token invalid")
+}
+
+func pretty(data interface{}) {
+	_, err := json.MarshalIndent(data, "", "")
+	if err != nil {
+		return
+	}
+}
+
 func GenJSONWebToken(id int64) (*JWTToken, error) {
 	// AccessToken
 	claims := jwt.MapClaims{}
 	claims["authorized"] = true
 	claims["user_id"] = id
-	claims["exp"] = time.Now().Add(time.Minute * 15).Unix()
+	claims["exp"] = time.Now().Add(time.Minute * 2).Unix()
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	token, err := jwtToken.SignedString([]byte(os.Getenv("API_SECRET")))
 	if err != nil {
