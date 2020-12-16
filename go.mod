@@ -8,6 +8,7 @@ require (
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/golang/protobuf v1.3.3
 	github.com/google/go-cmp v0.5.2 // indirect
+	github.com/stretchr/testify v1.6.1 // indirect
 	github.com/veritrans/go-midtrans v0.0.0-20201123044117-af6ac109e8d8 // indirect
 	golang.org/x/crypto v0.0.0-20190605123033-f99c8df09eb5
 	golang.org/x/net v0.0.0-20200202094626-16171245cfb2 // indirect

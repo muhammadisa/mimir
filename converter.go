@@ -3,8 +3,13 @@ package mimir
 import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/timestamp"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"time"
 )
+
+func ToTimestampPb(golangTime time.Time) *timestamppb.Timestamp {
+	return timestamppb.New(golangTime)
+}
 
 func ToPbTimestamp(golangTime time.Time) *timestamp.Timestamp {
 	timestamps, _ := ptypes.TimestampProto(golangTime)
