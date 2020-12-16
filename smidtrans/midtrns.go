@@ -90,7 +90,7 @@ func DetermineConsumableResponse(res *midtrans.Response, expire time.Time) (*Mid
 			Status:     res.StatusCode,
 			Gross:      res.GrossAmount,
 			Message:    res.StatusMessage,
-			Bank:       res.Bank,
+			Bank:       "permata",
 			VaNumber:   res.PermataVaNumber,
 			BillerCode: res.BillerCode,
 			BillKey:    res.BillKey,
@@ -104,7 +104,7 @@ func DetermineConsumableResponse(res *midtrans.Response, expire time.Time) (*Mid
 				Gross:      res.GrossAmount,
 				Message:    res.StatusMessage,
 				Bank:       res.Bank,
-				VaNumber:   "",
+				VaNumber:   "mandiri",
 				BillerCode: res.BillerCode,
 				BillKey:    res.BillKey,
 			}, nil
