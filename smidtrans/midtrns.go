@@ -82,7 +82,7 @@ type MidtransTransaction struct {
 	BillKey    string
 }
 
-func DetermineConsumableResponse(res *midtrans.Response, expire time.Time) *MidtransTransaction {
+func DetermineConsumableResponse(res *midtrans.Response, expire time.Time) (*MidtransTransaction, error) {
 	if res.PermataVaNumber != "" {
 		return &MidtransTransaction{
 			ExpireAt:   expire,
@@ -94,7 +94,7 @@ func DetermineConsumableResponse(res *midtrans.Response, expire time.Time) *Midt
 			VaNumber:   res.PermataVaNumber,
 			BillerCode: res.BillerCode,
 			BillKey:    res.BillKey,
-		}
+		}, nil
 	} else {
 		if res.BillKey != "" && res.BillerCode != "" {
 			return &MidtransTransaction{
@@ -107,18 +107,22 @@ func DetermineConsumableResponse(res *midtrans.Response, expire time.Time) *Midt
 				VaNumber:   "",
 				BillerCode: res.BillerCode,
 				BillKey:    res.BillKey,
-			}
+			}, nil
 		} else {
-			return &MidtransTransaction{
-				ExpireAt:   expire,
-				TrxType:    1,
-				Status:     res.StatusCode,
-				Gross:      res.GrossAmount,
-				Message:    res.StatusMessage,
-				Bank:       res.VANumbers[0].Bank,
-				VaNumber:   res.VANumbers[0].VANumber,
-				BillerCode: res.BillerCode,
-				BillKey:    res.BillKey,
+			if len(res.VANumbers) != 0 {
+				return &MidtransTransaction{
+					ExpireAt:   expire,
+					TrxType:    1,
+					Status:     res.StatusCode,
+					Gross:      res.GrossAmount,
+					Message:    res.StatusMessage,
+					Bank:       res.VANumbers[0].Bank,
+					VaNumber:   res.VANumbers[0].VANumber,
+					BillerCode: res.BillerCode,
+					BillKey:    res.BillKey,
+				}, nil
+			} else {
+				return nil, errors.New("error while doing payment")
 			}
 		}
 	}
