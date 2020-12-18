@@ -20,6 +20,7 @@ const Sandbox Env = "SANDBOX"
 const Production Env = "PRODUCTION"
 
 type CoreGatewayMidtrans struct {
+	SK   string
 	Core midtrans.CoreGateway
 }
 
@@ -65,6 +66,7 @@ func (m *Midtrans) InitializeMidtransClient() *CoreGatewayMidtrans {
 		panic(errors.New("invalid environment type"))
 	}
 	return &CoreGatewayMidtrans{
+		SK: m.SK,
 		Core: midtrans.CoreGateway{
 			Client: midclient,
 		},
@@ -75,11 +77,10 @@ type SignatureVerify struct {
 	OrderID     string
 	StatusCode  string
 	GrossAmount string
-	ServerKey   string
 }
 
 func (m *CoreGatewayMidtrans) VerifySignature(signature string, verify SignatureVerify) (bool, error) {
-	formulas := verify.OrderID + verify.StatusCode + verify.GrossAmount + verify.ServerKey
+	formulas := verify.OrderID + verify.StatusCode + verify.GrossAmount + m.SK
 	newSha512 := sha512.New()
 	newSha512.Write([]byte(formulas))
 	formatted := fmt.Sprintf("%x", newSha512.Sum(nil))
