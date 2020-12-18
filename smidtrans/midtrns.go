@@ -1,7 +1,9 @@
 package smidtrans
 
 import (
+	"crypto/sha512"
 	"errors"
+	"fmt"
 	"github.com/veritrans/go-midtrans"
 	"time"
 )
@@ -67,6 +69,24 @@ func (m *Midtrans) InitializeMidtransClient() *CoreGatewayMidtrans {
 			Client: midclient,
 		},
 	}
+}
+
+type SignatureVerify struct {
+	OrderID     string
+	StatusCode  string
+	GrossAmount string
+	ServerKey   string
+}
+
+func (m *CoreGatewayMidtrans) VerifySignature(signature string, verify SignatureVerify) (bool, error) {
+	formulas := verify.OrderID + verify.StatusCode + verify.GrossAmount + verify.ServerKey
+	newSha512 := sha512.New()
+	newSha512.Write([]byte(formulas))
+	formatted := fmt.Sprintf("%x", newSha512.Sum(nil))
+	if signature == formatted {
+		return true, nil
+	}
+	return false, errors.New("not authentic")
 }
 
 type MidtransTransaction struct {

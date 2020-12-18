@@ -4,16 +4,13 @@ go 1.15
 
 require (
 	firebase.google.com/go/v4 v4.1.0
+	github.com/cheekybits/is v0.0.0-20150225183255-68e9c0620927 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-sql-driver/mysql v1.5.0
-	github.com/golang/protobuf v1.3.3
-	github.com/google/go-cmp v0.5.2 // indirect
-	github.com/stretchr/testify v1.6.1 // indirect
-	github.com/veritrans/go-midtrans v0.0.0-20201123044117-af6ac109e8d8 // indirect
-	golang.org/x/crypto v0.0.0-20190605123033-f99c8df09eb5
-	golang.org/x/net v0.0.0-20200202094626-16171245cfb2 // indirect
-	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e // indirect
-	golang.org/x/text v0.3.3 // indirect
-	google.golang.org/api v0.17.0
-	google.golang.org/grpc v1.29.1
+	github.com/golang/protobuf v1.4.3
+	github.com/veritrans/go-midtrans v0.0.0-20201123044117-af6ac109e8d8
+	golang.org/x/crypto v0.0.0-20201217014255-9d1352758620
+	google.golang.org/api v0.36.0
+	google.golang.org/grpc v1.34.0
+	google.golang.org/protobuf v1.25.0
 )
