@@ -325,7 +325,7 @@ func (c *CoreGatewayMidtrans) ChargeReqBRIVirtualAccount(
 func (c *CoreGatewayMidtrans) RequestCharge(chargeReq *midtrans.ChargeReq) (*midtrans.Response, error) {
 	response, err := c.Core.Charge(chargeReq)
 	if err != nil {
-		log.Println(err)
+		log.Println("ERROR CHARGE")
 		return nil, err
 	}
 	return &response, nil
