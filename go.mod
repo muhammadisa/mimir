@@ -6,7 +6,6 @@ require (
 	firebase.google.com/go/v4 v4.1.0
 	github.com/cheekybits/is v0.0.0-20150225183255-68e9c0620927 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/go-kit/kit v0.10.0
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/golang/protobuf v1.4.3
 	github.com/veritrans/go-midtrans v0.0.0-20201123044117-af6ac109e8d8

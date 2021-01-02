@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/veritrans/go-midtrans"
+	"log"
 	"time"
 )
 
@@ -124,6 +125,7 @@ func DetermineConsumableResponse(res *midtrans.Response, expire time.Time) (*Mid
 		}
 	}
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 	return &MidtransTransaction{
@@ -323,6 +325,7 @@ func (c *CoreGatewayMidtrans) ChargeReqBRIVirtualAccount(
 func (c *CoreGatewayMidtrans) RequestCharge(chargeReq *midtrans.ChargeReq) (*midtrans.Response, error) {
 	response, err := c.Core.Charge(chargeReq)
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 	return &response, nil
