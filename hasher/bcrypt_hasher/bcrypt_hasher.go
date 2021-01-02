@@ -1,4 +1,4 @@
-package mimir
+package bcrypt_hasher
 
 import "golang.org/x/crypto/bcrypt"
 

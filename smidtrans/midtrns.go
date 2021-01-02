@@ -79,8 +79,8 @@ type SignatureVerify struct {
 	GrossAmount string
 }
 
-func (m *CoreGatewayMidtrans) VerifySignature(signature string, verify SignatureVerify) (bool, error) {
-	formulas := verify.OrderID + verify.StatusCode + verify.GrossAmount + m.SK
+func (c *CoreGatewayMidtrans) VerifySignature(signature string, verify SignatureVerify) (bool, error) {
+	formulas := verify.OrderID + verify.StatusCode + verify.GrossAmount + c.SK
 	newSha512 := sha512.New()
 	newSha512.Write([]byte(formulas))
 	formatted := fmt.Sprintf("%x", newSha512.Sum(nil))

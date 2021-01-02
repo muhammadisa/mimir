@@ -1,4 +1,4 @@
-package mimir
+package time
 
 import (
 	"github.com/golang/protobuf/ptypes"
