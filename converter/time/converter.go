@@ -7,6 +7,16 @@ import (
 	"time"
 )
 
+func CurrentTime(locationName string) time.Time {
+	location, _ := time.LoadLocation(locationName)
+	return time.Now().In(location)
+}
+
+func LocalTime(t time.Time, locationName string) time.Time {
+	location, _ := time.LoadLocation(locationName)
+	return t.In(location)
+}
+
 func ToTimestampPb(golangTime time.Time) *timestamppb.Timestamp {
 	return timestamppb.New(golangTime)
 }

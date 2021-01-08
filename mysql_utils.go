@@ -24,7 +24,7 @@ func mySQLTestCall(db *sql.DB, testTable string) error {
 
 func (dcb DBConnectorBuilder) MySQLConnect(testTable string) (*sql.DB, error) {
 	connectionString := fmt.Sprintf(
-		"%s:%s@(%s:%s)/%s?charset=utf8&parseTime=true&loc=Local",
+		"%s:%s@(%s:%s)/%s?charset=utf8&parseTime=true",
 		dcb.DBUser,
 		dcb.DBPassword,
 		dcb.DBHost,
