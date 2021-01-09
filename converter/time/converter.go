@@ -7,14 +7,21 @@ import (
 	"time"
 )
 
-func CurrentTime(locationName string) time.Time {
-	location, _ := time.LoadLocation(locationName)
-	return time.Now().In(location)
+type CustomTime struct {
+	// TimeZone constant
+	TimeZone string
+	// Adjustment this UTC hour addition
+	Adjustment time.Duration
 }
 
-func LocalTime(t time.Time, locationName string) time.Time {
-	location, _ := time.LoadLocation(locationName)
-	return t.In(location)
+func (ct *CustomTime) CurrentTime() time.Time {
+	location, _ := time.LoadLocation(ct.TimeZone)
+	return time.Now().In(location).Add(ct.Adjustment)
+}
+
+func (ct *CustomTime) Time(t time.Time) time.Time {
+	location, _ := time.LoadLocation(ct.TimeZone)
+	return t.In(location).Add(ct.Adjustment)
 }
 
 func ToTimestampPb(golangTime time.Time) *timestamppb.Timestamp {

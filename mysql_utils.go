@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"net/url"
 )
 
 type DBConnectorBuilder struct {
@@ -24,12 +25,13 @@ func mySQLTestCall(db *sql.DB, testTable string) error {
 
 func (dcb DBConnectorBuilder) MySQLConnect(testTable string) (*sql.DB, error) {
 	connectionString := fmt.Sprintf(
-		"%s:%s@(%s:%s)/%s?charset=utf8&parseTime=true",
+		"%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=true&loc=%s",
 		dcb.DBUser,
 		dcb.DBPassword,
 		dcb.DBHost,
 		dcb.DBPort,
 		dcb.DBName,
+		url.PathEscape("Asia/Jakarta"),
 	)
 	db, err := sql.Open("mysql", connectionString)
 	if err != nil {

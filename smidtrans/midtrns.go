@@ -11,10 +11,12 @@ import (
 )
 
 type Midtrans struct {
-	SK       string
-	CK       string
-	ENV      Env
-	TimeZone string
+	SK             string
+	CK             string
+	ENV            Env
+	TimeZone       string
+	Adjustment     time.Duration
+	ExpireDuration time.Duration
 }
 
 type Env string
@@ -23,9 +25,11 @@ const Sandbox Env = "SANDBOX"
 const Production Env = "PRODUCTION"
 
 type CoreGatewayMidtrans struct {
-	SK       string
-	Core     midtrans.CoreGateway
-	TimeZone string
+	SK             string
+	Core           midtrans.CoreGateway
+	TimeZone       string
+	Adjustment     time.Duration
+	ExpireDuration time.Duration
 }
 
 type IBankVAPayments interface {
@@ -70,8 +74,10 @@ func (m *Midtrans) InitializeMidtransClient() *CoreGatewayMidtrans {
 		panic(errors.New("invalid environment type"))
 	}
 	return &CoreGatewayMidtrans{
-		SK:       m.SK,
-		TimeZone: m.TimeZone,
+		SK:             m.SK,
+		TimeZone:       m.TimeZone,
+		Adjustment:     m.Adjustment,
+		ExpireDuration: m.ExpireDuration,
 		Core: midtrans.CoreGateway{
 			Client: midclient,
 		},
@@ -150,8 +156,12 @@ func (c *CoreGatewayMidtrans) ChargeReqMandiriBill(
 	custName, custPhone string,
 	grossAmt int64,
 ) (*midtrans.ChargeReq, time.Time, time.Time) {
-	trxTime := customtime.CurrentTime(c.TimeZone)
-	trxExpire := trxTime.Add(2 * time.Hour)
+	ct := customtime.CustomTime{
+		TimeZone:   c.TimeZone,
+		Adjustment: c.Adjustment,
+	}
+	trxTime := ct.CurrentTime()
+	trxExpire := trxTime.Add(c.ExpireDuration)
 	return &midtrans.ChargeReq{
 		PaymentType: midtrans.SourceEchannel,
 		MandiriBillBankTransferDetail: &midtrans.MandiriBillBankTransferDetail{
@@ -187,8 +197,12 @@ func (c *CoreGatewayMidtrans) ChargeReqPermataVirtualAccount(
 	custName, custPhone string,
 	grossAmt int64,
 ) (*midtrans.ChargeReq, time.Time, time.Time) {
-	trxTime := customtime.CurrentTime(c.TimeZone)
-	trxExpire := trxTime.Add(2 * time.Hour)
+	ct := customtime.CustomTime{
+		TimeZone:   c.TimeZone,
+		Adjustment: c.Adjustment,
+	}
+	trxTime := ct.CurrentTime()
+	trxExpire := trxTime.Add(c.ExpireDuration)
 	return &midtrans.ChargeReq{
 		PaymentType: midtrans.SourceBankTransfer,
 		BankTransfer: &midtrans.BankTransferDetail{
@@ -223,8 +237,12 @@ func (c *CoreGatewayMidtrans) ChargeReqBNIVirtualAccount(
 	custName, custPhone string,
 	grossAmt int64,
 ) (*midtrans.ChargeReq, time.Time, time.Time) {
-	trxTime := customtime.CurrentTime(c.TimeZone)
-	trxExpire := trxTime.Add(2 * time.Hour)
+	ct := customtime.CustomTime{
+		TimeZone:   c.TimeZone,
+		Adjustment: c.Adjustment,
+	}
+	trxTime := ct.CurrentTime()
+	trxExpire := trxTime.Add(c.ExpireDuration)
 	return &midtrans.ChargeReq{
 		PaymentType: midtrans.SourceBankTransfer,
 		BankTransfer: &midtrans.BankTransferDetail{
@@ -259,8 +277,12 @@ func (c *CoreGatewayMidtrans) ChargeReqBCAVirtualAccount(
 	custName, custPhone string,
 	grossAmt int64,
 ) (*midtrans.ChargeReq, time.Time, time.Time) {
-	trxTime := customtime.CurrentTime(c.TimeZone)
-	trxExpire := trxTime.Add(2 * time.Hour)
+	ct := customtime.CustomTime{
+		TimeZone:   c.TimeZone,
+		Adjustment: c.Adjustment,
+	}
+	trxTime := ct.CurrentTime()
+	trxExpire := trxTime.Add(c.ExpireDuration)
 	return &midtrans.ChargeReq{
 		PaymentType: midtrans.SourceBankTransfer,
 		BankTransfer: &midtrans.BankTransferDetail{
@@ -295,8 +317,12 @@ func (c *CoreGatewayMidtrans) ChargeReqBRIVirtualAccount(
 	custName, custPhone string,
 	grossAmt int64,
 ) (*midtrans.ChargeReq, time.Time, time.Time) {
-	trxTime := customtime.CurrentTime(c.TimeZone)
-	trxExpire := trxTime.Add(2 * time.Hour)
+	ct := customtime.CustomTime{
+		TimeZone:   c.TimeZone,
+		Adjustment: c.Adjustment,
+	}
+	trxTime := ct.CurrentTime()
+	trxExpire := trxTime.Add(c.ExpireDuration)
 	return &midtrans.ChargeReq{
 		PaymentType: midtrans.SourceBankTransfer,
 		BankTransfer: &midtrans.BankTransferDetail{
