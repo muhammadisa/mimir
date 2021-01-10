@@ -13,6 +13,7 @@ type DBConnectorBuilder struct {
 	DBHost     string
 	DBPort     string
 	DBName     string
+	TZ         string
 }
 
 func mySQLTestCall(db *sql.DB, testTable string) error {
@@ -31,7 +32,7 @@ func (dcb DBConnectorBuilder) MySQLConnect(testTable string) (*sql.DB, error) {
 		dcb.DBHost,
 		dcb.DBPort,
 		dcb.DBName,
-		url.PathEscape("Asia/Jakarta"),
+		url.PathEscape(dcb.TZ),
 	)
 	db, err := sql.Open("mysql", connectionString)
 	if err != nil {
