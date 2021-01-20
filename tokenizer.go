@@ -2,7 +2,6 @@ package mimir
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	firebase "firebase.google.com/go/v4"
 	"firebase.google.com/go/v4/auth"
@@ -16,26 +15,6 @@ import (
 type JWTToken struct {
 	Token   string `json:"token"`
 	Refresh string `json:"refresh"`
-}
-
-func JSONWebTokenValidate(ctx context.Context) error {
-	bearer, err := Bearer(ctx)
-	if err != nil {
-		return err
-	}
-	token, err := jwt.Parse(bearer, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
-		}
-		return []byte(os.Getenv("API_SECRET")), nil
-	})
-	if err != nil {
-		return err
-	}
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		pretty(claims)
-	}
-	return nil
 }
 
 func ExtractIDJSONWebToken(ctx context.Context) (interface{}, error) {
@@ -56,13 +35,6 @@ func ExtractIDJSONWebToken(ctx context.Context) (interface{}, error) {
 		return claims["user_id"], nil
 	}
 	return nil, errors.New("token invalid")
-}
-
-func pretty(data interface{}) {
-	_, err := json.MarshalIndent(data, "", "")
-	if err != nil {
-		return
-	}
 }
 
 func GenJSONWebToken(id int64, accessExpr time.Duration) (*JWTToken, error) {
