@@ -1,4 +1,4 @@
-package mimir
+package strutil
 
 import (
 	"context"

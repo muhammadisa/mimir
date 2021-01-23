@@ -1,4 +1,4 @@
-package mimir
+package tokenizer
 
 import (
 	"context"
@@ -7,6 +7,7 @@ import (
 	"firebase.google.com/go/v4/auth"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/muhammadisa/mimir/strutil"
 	"google.golang.org/api/option"
 	"os"
 	"time"
@@ -18,7 +19,7 @@ type JWTToken struct {
 }
 
 func ExtractIDJSONWebToken(ctx context.Context) (interface{}, error) {
-	bearer, err := Bearer(ctx)
+	bearer, err := strutil.Bearer(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -68,10 +69,6 @@ func InitFirebaseApp(ctx context.Context, servicePath string) (*firebase.App, er
 		return nil, err
 	}
 	return app, nil
-}
-
-func GetPhoneFromToken(token *auth.Token) string {
-	return TruncateCountryCode(token.Firebase.Identities["phone"].([]interface{})[0].(string))
 }
 
 func ReadGoogleIDToken(ctx context.Context, idToken string, app *firebase.App) (*auth.Token, error) {
