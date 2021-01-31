@@ -169,9 +169,9 @@ func (c *CoreGatewayMidtrans) ChargeReqMandiriBill(
 			BillInfo2: "dept",
 		},
 		CustomExpiry: &midtrans.CustomExpiry{
-			OrderTime:      trxTime.Format("2006-01-02 15:04:05 +0700"),
+			//OrderTime:      trxTime.Format("2006-01-02 15:04:05 +0700"),
 			ExpiryDuration: 60,
-			Unit:           "MINUTES",
+			Unit:           "MINUTE",
 		},
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  trxID,
@@ -209,9 +209,9 @@ func (c *CoreGatewayMidtrans) ChargeReqPermataVirtualAccount(
 			Bank: midtrans.BankPermata,
 		},
 		CustomExpiry: &midtrans.CustomExpiry{
-			OrderTime:      trxTime.Format("2006-01-02 15:04:05 +0700"),
+			//OrderTime:      trxTime.Format("2006-01-02 15:04:05 +0700"),
 			ExpiryDuration: 60,
-			Unit:           "MINUTES",
+			Unit:           "MINUTE",
 		},
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  trxID,
@@ -249,9 +249,9 @@ func (c *CoreGatewayMidtrans) ChargeReqBNIVirtualAccount(
 			Bank: midtrans.BankBni,
 		},
 		CustomExpiry: &midtrans.CustomExpiry{
-			OrderTime:      trxTime.Format("2006-01-02 15:04:05 +0700"),
+			//OrderTime:      trxTime.Format("2006-01-02 15:04:05 +0700"),
 			ExpiryDuration: 60,
-			Unit:           "MINUTES",
+			Unit:           "MINUTE",
 		},
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  trxID,
@@ -289,9 +289,9 @@ func (c *CoreGatewayMidtrans) ChargeReqBCAVirtualAccount(
 			Bank: midtrans.BankBca,
 		},
 		CustomExpiry: &midtrans.CustomExpiry{
-			OrderTime:      trxTime.Format("2006-01-02 15:04:05 +0700"),
+			//OrderTime:      trxTime.Format("2006-01-02 15:04:05 +0700"),
 			ExpiryDuration: 60,
-			Unit:           "MINUTES",
+			Unit:           "MINUTE",
 		},
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  trxID,
@@ -329,9 +329,9 @@ func (c *CoreGatewayMidtrans) ChargeReqBRIVirtualAccount(
 			Bank: midtrans.BankBri,
 		},
 		CustomExpiry: &midtrans.CustomExpiry{
-			OrderTime:      trxTime.Format("2006-01-02 15:04:05 +0700"),
+			//OrderTime:      trxTime.Format("2006-01-02 15:04:05 +0700"),
 			ExpiryDuration: 60,
-			Unit:           "MINUTES",
+			Unit:           "MINUTE",
 		},
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  trxID,
