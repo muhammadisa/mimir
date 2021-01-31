@@ -170,8 +170,8 @@ func (c *CoreGatewayMidtrans) ChargeReqMandiriBill(
 		},
 		CustomExpiry: &midtrans.CustomExpiry{
 			OrderTime:      trxTime.Format("2006-01-02 15:04:05 +0700"),
-			ExpiryDuration: 120,
-			Unit:           "MINUTE",
+			ExpiryDuration: 60,
+			Unit:           "MINUTES",
 		},
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  trxID,
@@ -210,8 +210,8 @@ func (c *CoreGatewayMidtrans) ChargeReqPermataVirtualAccount(
 		},
 		CustomExpiry: &midtrans.CustomExpiry{
 			OrderTime:      trxTime.Format("2006-01-02 15:04:05 +0700"),
-			ExpiryDuration: 120,
-			Unit:           "MINUTE",
+			ExpiryDuration: 60,
+			Unit:           "MINUTES",
 		},
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  trxID,
@@ -250,8 +250,8 @@ func (c *CoreGatewayMidtrans) ChargeReqBNIVirtualAccount(
 		},
 		CustomExpiry: &midtrans.CustomExpiry{
 			OrderTime:      trxTime.Format("2006-01-02 15:04:05 +0700"),
-			ExpiryDuration: 120,
-			Unit:           "MINUTE",
+			ExpiryDuration: 60,
+			Unit:           "MINUTES",
 		},
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  trxID,
@@ -290,8 +290,8 @@ func (c *CoreGatewayMidtrans) ChargeReqBCAVirtualAccount(
 		},
 		CustomExpiry: &midtrans.CustomExpiry{
 			OrderTime:      trxTime.Format("2006-01-02 15:04:05 +0700"),
-			ExpiryDuration: 120,
-			Unit:           "MINUTE",
+			ExpiryDuration: 60,
+			Unit:           "MINUTES",
 		},
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  trxID,
@@ -330,8 +330,8 @@ func (c *CoreGatewayMidtrans) ChargeReqBRIVirtualAccount(
 		},
 		CustomExpiry: &midtrans.CustomExpiry{
 			OrderTime:      trxTime.Format("2006-01-02 15:04:05 +0700"),
-			ExpiryDuration: 120,
-			Unit:           "MINUTE",
+			ExpiryDuration: 60,
+			Unit:           "MINUTES",
 		},
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  trxID,
