@@ -18,10 +18,10 @@ type JWTToken struct {
 	Refresh string `json:"refresh"`
 }
 
-func ExtractIDJSONWebToken(ctx context.Context) (interface{}, error) {
+func ExtractIDJSONWebToken(ctx context.Context) (interface{}, *string, error) {
 	bearer, err := strutil.Bearer(ctx)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	token, err := jwt.Parse(bearer, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -30,19 +30,20 @@ func ExtractIDJSONWebToken(ctx context.Context) (interface{}, error) {
 		return []byte(os.Getenv("API_SECRET")), nil
 	})
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		return claims["user_id"], nil
+		return claims["user_id"], claims["timezone"].(*string), nil
 	}
-	return nil, errors.New("token invalid")
+	return nil, nil, errors.New("token invalid")
 }
 
-func GenJSONWebToken(id int64, accessExpr time.Duration) (*JWTToken, error) {
+func GenJSONWebToken(id int64, tz string, accessExpr time.Duration) (*JWTToken, error) {
 	// AccessToken
 	claims := jwt.MapClaims{}
 	claims["authorized"] = true
 	claims["user_id"] = id
+	claims["timezone"] = tz
 	claims["exp"] = time.Now().Add(accessExpr).Unix()
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	token, err := jwtToken.SignedString([]byte(os.Getenv("API_SECRET")))
@@ -53,6 +54,7 @@ func GenJSONWebToken(id int64, accessExpr time.Duration) (*JWTToken, error) {
 	refreshToken := jwt.New(jwt.SigningMethodHS256)
 	rtClaims := refreshToken.Claims.(jwt.MapClaims)
 	rtClaims["user_id"] = id
+	rtClaims["timezone"] = tz
 	refresh, err := refreshToken.SignedString([]byte(os.Getenv("API_SECRET")))
 	if err != nil {
 		return nil, err

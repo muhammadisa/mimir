@@ -3,7 +3,9 @@ module github.com/muhammadisa/mimir
 go 1.15
 
 require (
+	4d63.com/tz v1.2.0
 	firebase.google.com/go/v4 v4.1.0
+	github.com/afex/hystrix-go v0.0.0-20180502004556-fa1af6a1f4f5
 	github.com/cheekybits/is v0.0.0-20150225183255-68e9c0620927 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-kit/kit v0.10.0
