@@ -1,7 +1,6 @@
 package tz
 
 import (
-	"4d63.com/tz"
 	"time"
 )
 
@@ -36,17 +35,17 @@ func (l *Lttz) SetTime(t time.Time) *Lttz {
 }
 
 func (l *Lttz) Apply() time.Time {
-	local, _ := tz.LoadLocation(l.LocationName)
+	local, _ := time.LoadLocation(l.LocationName)
 	return l.Time.In(local)
 }
 
 func (l *Lttz) Modify(time *time.Time) {
-	local, _ := tz.LoadLocation(l.LocationName)
+	local, _ := time.LoadLocation(l.LocationName)
 	*time = l.Time.In(local)
 }
 
 func (l *Lttz) ApplyWithLayout() string {
-	local, _ := tz.LoadLocation(l.LocationName)
+	local, _ := time.LoadLocation(l.LocationName)
 	if l.TimeLayout != "" {
 		return l.Time.In(local).Format(l.TimeLayout)
 	}
