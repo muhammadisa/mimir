@@ -39,9 +39,9 @@ func (l *Lttz) Apply() time.Time {
 	return l.Time.In(local)
 }
 
-func (l *Lttz) Modify(time *time.Time) {
+func (l *Lttz) Modify(times *time.Time) {
 	local, _ := time.LoadLocation(l.LocationName)
-	*time = l.Time.In(local)
+	*times = l.Time.In(local)
 }
 
 func (l *Lttz) ApplyWithLayout() string {
