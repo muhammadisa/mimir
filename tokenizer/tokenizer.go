@@ -18,10 +18,10 @@ type JWTToken struct {
 	Refresh string `json:"refresh"`
 }
 
-func ExtractIDJSONWebToken(ctx context.Context) (interface{}, *string, error) {
+func ExtractIDJSONWebToken(ctx context.Context) (interface{}, string, error) {
 	bearer, err := strutil.Bearer(ctx)
 	if err != nil {
-		return nil, nil, err
+		return nil, "", err
 	}
 	token, err := jwt.Parse(bearer, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -30,12 +30,16 @@ func ExtractIDJSONWebToken(ctx context.Context) (interface{}, *string, error) {
 		return []byte(os.Getenv("API_SECRET")), nil
 	})
 	if err != nil {
-		return nil, nil, err
+		return nil, "", err
 	}
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		return claims["user_id"], claims["timezone"].(*string), nil
+		if claims["timezone"] == nil {
+			return claims["user_id"], "", nil
+		} else {
+			return claims["user_id"], claims["timezone"].(string), nil
+		}
 	}
-	return nil, nil, errors.New("token invalid")
+	return nil, "", errors.New("token invalid")
 }
 
 func GenJSONWebToken(id int64, tz string, accessExpr time.Duration) (*JWTToken, error) {
